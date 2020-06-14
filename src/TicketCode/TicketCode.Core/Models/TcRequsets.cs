@@ -48,6 +48,16 @@ namespace TicketCode.Core.Models
         [Required]
         public long iAccountId { get; set; }
 
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [MaxLength(250)]
+        public string sMemo { get; set; }
+
+        public virtual TcAccounts TcAccount { get; set; }
+
+        public virtual TcGroups TcGroup { get; set; }
+
         public virtual IEnumerable<TcRequestLines> TcRequestLines { get; set; }
     }
 }

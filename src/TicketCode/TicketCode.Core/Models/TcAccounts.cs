@@ -25,5 +25,7 @@ namespace TicketCode.Core.Models
 
         [Required]
         public bool bDisable { get; set; }
+
+        public virtual IEnumerable<TcGroupInAccount> TcGroupInAccounts { get; set; }
     }
 }

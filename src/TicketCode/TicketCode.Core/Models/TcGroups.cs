@@ -61,5 +61,7 @@ namespace TicketCode.Core.Models
 
         [Required]
         public bool bDelete { get; set; }
+
+        public virtual IEnumerable<TcGroupInAccount> TcGroupInAccounts { get; set; }
     }
 }
