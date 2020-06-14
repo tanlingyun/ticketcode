@@ -8,9 +8,5 @@ namespace TicketCode.WebHost.Extension
 {
     public static class ApplicationBuilderExtension
     {
-        public static IApplicationBuilder UseCustomedDistributedRedisCache(this IApplicationBuilder app)
-        {
-            return app;
-        }
     }
 }

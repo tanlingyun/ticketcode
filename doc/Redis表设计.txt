@@ -1,0 +1,13 @@
+可用表
+
+可用列表：list
+{appid}.vd
+
+hashset
+{appid}.{code}
+
+
+分组
+
+应用
+
