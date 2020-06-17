@@ -9,9 +9,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace Microsoft.Extensions.Caching.StackExchangeRedis
+namespace TicketCode.Core.Redis.StackExchangeRedis
 {
-    public class RedisCache : IDisposable
+    public class RedisCache : IRedisCache,IDisposable
     {
         // KEYS[1] = = key
         // ARGV[1] = absolute-expiration - ticks as long (-1 for none)
@@ -140,6 +140,110 @@ namespace Microsoft.Extensions.Caching.StackExchangeRedis
                         GetExpirationInSeconds(creationTime, absoluteExpiration, options) ?? NotPresent,
                         value
                 }).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// 像列表右侧插入数据
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="values"></param>
+        public void ListRightPush(string key, string[] values)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (values == null || values.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            Connect();
+
+            this._cache.ListRightPush(_instance + key, GetRedisMembers(values));
+
+        }
+
+        public async Task ListRightPushAsync(string key, string[] values, CancellationToken token = default(CancellationToken))
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (values == null || values.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            token.ThrowIfCancellationRequested();
+
+            await ConnectAsync(token).ConfigureAwait(false);
+
+            await this._cache.ListRightPushAsync(_instance + key, GetRedisMembers(values));
+        }
+
+        /// <summary>
+        /// 从列表最前面弹出元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string ListLeftPop(string key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            Connect();
+
+            return this._cache.ListLeftPop(_instance + key);
+        }
+
+        public async Task<string> ListLeftPopAsync(string key, CancellationToken token = default(CancellationToken))
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            token.ThrowIfCancellationRequested();
+
+            await ConnectAsync(token).ConfigureAwait(false);
+
+            return await this._cache.ListLeftPopAsync(_instance + key);
+        }
+
+        /// <summary>
+        /// 获取列表长度
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long ListLength(string key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            Connect();
+
+            return this._cache.ListLength(_instance + key);
+        }
+
+        public async Task<long> ListLengthAsync(string key, CancellationToken token = default(CancellationToken))
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            token.ThrowIfCancellationRequested();
+
+            await ConnectAsync(token).ConfigureAwait(false);
+
+            return await this._cache.ListLengthAsync(_instance + key);
         }
 
         public void Refresh(string key)
@@ -428,6 +532,17 @@ namespace Microsoft.Extensions.Caching.StackExchangeRedis
             }
 
             return absoluteExpiration;
+        }
+
+        private static RedisValue[] GetRedisMembers(params string[] members)
+        {
+            var redisMembers = new RedisValue[members.Length];
+            for (int i = 0; i < members.Length; i++)
+            {
+                redisMembers[i] = (RedisValue)members[i];
+            }
+
+            return redisMembers;
         }
 
         public void Dispose()

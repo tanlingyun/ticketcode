@@ -13,9 +13,9 @@ using TicketCode.Core.Models;
 
 namespace TicketCode.Core.Data
 {
-    public class SimplDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class TcDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public SimplDbContext(DbContextOptions options) : base(options)
+        public TcDbContext(DbContextOptions options) : base(options)
         {
         }
 

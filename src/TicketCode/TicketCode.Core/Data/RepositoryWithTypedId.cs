@@ -10,7 +10,7 @@ namespace TicketCode.Core.Data
 {
     public class RepositoryWithTypedId<T, TId> : IRepositoryWithTypedId<T, TId> where T : class, IEntityWithTypedId<TId>
     {
-        public RepositoryWithTypedId(SimplDbContext context)
+        public RepositoryWithTypedId(TcDbContext context)
         {
             Context = context;
             DbSet = Context.Set<T>();

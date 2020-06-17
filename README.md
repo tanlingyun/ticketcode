@@ -1,5 +1,92 @@
-# ticketcode
-订单取票码
+# 简介
+取票码支持分组，由[分组前缀]+[序号]+[校验位]组成，长度可自定义
 
 # 相关技术
 DoNetCode 3.1 + MySQL + Redis
+
+# 公用请求参数
+|参数名|名称|类型|说明|
+|:--|:--|:--|:--|
+|appid|应用id|字符串|分配的appid|
+|group|分组|数值|自定义的分组前缀|
+|timestamp|时间|时间戳|请求的时间，5分钟有效期|
+|sign|签名|字符串|签名|
+|reqno|通讯号|字符串|通讯识别
+
+# 公用返回参数
+|参数名|名称|类型|说明|
+|:--|:--|:--|:--|
+|code|状态码|
+|data|数据|
+|message|返回消息|
+|reqno|通讯号|
+
+# 相关接口
+### 取票接口
+>## api/code/get
+
+### 请求参数
+|参数名|名称|类型|说明|
+|:--|:--|:--|:--|
+|sOuterNo|外部订单号|string(50)|20202222222222222|
+|iNumber|取票码数量|string(50)|1|
+|tExpireTime|取票码失效时间|string(50)|YYYY/MM/DD HH:MM:SS|
+|sMemo|备注|string(200)||
+||||
+
+### 响应参数
+|参数名|名称|类型|说明|
+|:--|:--|:--|:--|
+|sTcNo|取码单号|string(50)|系统为本次取码分配的单号
+|sOuterNo|外部订单号|string(50)|20202222222222222|
+|iPrefixCode|取票码分组|int|3|
+|iLength|取票码长度|int|4|
+|aNumbers|取票码数组|array|323233,326251|
+|tExpireTime|取票码失效时间|string(50)|YYYY/MM/DD HH:MM:SS|
+||||
+
+
+>post api/code/get?appid=HXTC202001&timestamp=1592381177&reqno=123&group=1&sign=6d5b5ba9a7a79064d21489c2aa3ac6ad
+
+>{
+    "data": {
+        "sTcNo": "12006171624230001",
+        "sOuterNo": "123456",
+        "iPrefixCode": 1,
+        "iLength": 6,
+        "aNumbers": [
+            10244513,
+            10269071,
+            10201448,
+            10217232,
+            10288500,
+            10281356,
+            10208344,
+            10286755,
+            10234321,
+            10284450
+        ],
+        "tExpireTime": "2020/06/17 00:00:00"
+    },
+    "code": 0,
+    "message": null
+}
+
+### 核销接口
+>## api/code/consume
+
+
+## 签名算法
+采用md5签名，签名格式如下
+>appid+group+reqno+timestamp+key
+
+其中key为分配的应用对应的密钥
+
+## code说明
+|值|含义|
+|:--|:--|
+|0|成功|
+|-1|失败|
+|1|无分组权限|
+
+# 数据库表

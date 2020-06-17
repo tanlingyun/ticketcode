@@ -4,8 +4,8 @@
     {
         public TValue data { get; set; }
 
-        protected internal Result(TValue value, int code, string message)
-            : base(code, message)
+        protected internal Result(TValue value, int code, string message, string reqno)
+            : base(code, message, reqno)
         {
             data = value;
         }

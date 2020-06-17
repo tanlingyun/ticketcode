@@ -5,7 +5,7 @@
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace Microsoft.Extensions.Caching.StackExchangeRedis
+namespace TicketCode.Core.Redis.StackExchangeRedis
 {
     internal static class RedisExtensions
     {

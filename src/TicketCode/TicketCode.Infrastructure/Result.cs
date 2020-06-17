@@ -4,32 +4,35 @@
     {
         public int code { get; }
 
+        public string reqno { get; set; }
+
         public string message { get; }
 
-        protected Result(int code, string message)
+        protected Result(int code, string message, string reqno)
         {
             this.code = code;
             this.message = message;
+            this.reqno = reqno;
         }
 
-        public static Result Fail(string error)
+        public static Result Fail(string error, string reqno)
         {
-            return new Result(-1, error);
+            return new Result(-1, error,reqno);
         }
 
-        public static Result Ok()
+        public static Result Ok(string reqno)
         {
-            return new Result(0, "");
+            return new Result(0, "", reqno);
         }
 
-        public static Result<TValue> Ok<TValue>(TValue value)
+        public static Result<TValue> Ok<TValue>(TValue value, string reqno)
         {
-            return new Result<TValue>(value, 0, null);
+            return new Result<TValue>(value, 0, null,reqno);
         }
 
-        public static Result<TValue> Fail<TValue>(string error)
+        public static Result<TValue> Fail<TValue>(string error, string reqno)
         {
-            return new Result<TValue>(default(TValue), -1, error);
+            return new Result<TValue>(default(TValue), -1, error, reqno);
         }
     }
 }

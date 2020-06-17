@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC902775-A8D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{3B0E4C38-ED68-449D-BDB8-F1B0B3257AAA}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\README.md = ..\..\README.md
 		..\..\doc\Redis表设计.txt = ..\..\doc\Redis表设计.txt
 	EndProjectSection
 EndProject

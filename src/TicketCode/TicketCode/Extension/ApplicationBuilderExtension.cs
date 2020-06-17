@@ -8,5 +8,6 @@ namespace TicketCode.WebHost.Extension
 {
     public static class ApplicationBuilderExtension
     {
+
     }
 }

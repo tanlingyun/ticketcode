@@ -5,7 +5,7 @@
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace Microsoft.Extensions.Caching.StackExchangeRedis
+namespace TicketCode.Core.Redis.StackExchangeRedis
 {
     /// <summary>
     /// Configuration options for <see cref="RedisCache"/>.
