@@ -17,7 +17,7 @@ namespace TicketCode.Core.Dto
         public int iNumber { get; set; }
 
         [Required(ErrorMessage = "失效时间不能为空")]
-        public DateTime tExpireTime { get; set; }
+        public string tExpireTime { get; set; }
 
         [MaxLength(200,ErrorMessage = "备注不能超过200个字符")]
         public string sMemo { get; set; }

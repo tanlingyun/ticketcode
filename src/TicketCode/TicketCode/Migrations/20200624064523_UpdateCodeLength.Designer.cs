@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketCode.Core.Data;
 
 namespace TicketCode.WebHost.Migrations
 {
     [DbContext(typeof(TcDbContext))]
-    partial class TcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200624064523_UpdateCodeLength")]
+    partial class UpdateCodeLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,8 +35,8 @@ namespace TicketCode.WebHost.Migrations
 
                     b.Property<string>("sAppName")
                         .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
+                        .HasMaxLength(10);
 
                     b.Property<string>("sAppSecret")
                         .IsRequired()
@@ -222,7 +224,7 @@ namespace TicketCode.WebHost.Migrations
 
                     b.HasIndex("iGroupId");
 
-                    b.HasIndex("iAccountId", "iGroupId", "sOuterNo")
+                    b.HasIndex("iAccountId", "sOuterNo")
                         .IsUnique();
 
                     b.ToTable("TcRequsets");

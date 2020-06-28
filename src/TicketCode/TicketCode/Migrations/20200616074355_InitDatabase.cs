@@ -14,7 +14,7 @@ namespace TicketCode.WebHost.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    sAppName = table.Column<string>(maxLength: 10, nullable: false),
+                    sAppName = table.Column<string>(maxLength: 50, nullable: false),
                     sAppId = table.Column<string>(maxLength: 50, nullable: false),
                     sAppSecret = table.Column<string>(maxLength: 50, nullable: false),
                     tCreateTime = table.Column<DateTime>(nullable: false),

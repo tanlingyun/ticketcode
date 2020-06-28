@@ -18,7 +18,7 @@ namespace TicketCode.Core.Models
         /// 取票码
         /// </summary>
         [Required]
-        public int iFullCode { get; set; }
+        public long iFullCode { get; set; }
 
         /// <summary>
         /// 核销时间

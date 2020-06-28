@@ -26,6 +26,6 @@ namespace TicketCode.Core.Services
         /// <param name="sOuterNoOrTcNo"></param>
         /// <param name="iFullCode"></param>
         /// <returns></returns>
-        Task<Result> ConsumeCode(int iAccountId, string sOuterNoOrTcNo, int iFullCode);
+        Task<Result> ConsumeCode(int iAccountId, string sOuterNoOrTcNo, long[] iFullCode);
     }
 }

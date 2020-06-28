@@ -79,7 +79,7 @@ namespace TicketCode.Core.Services
                     if (ckGroup.iUsedNumber >= max)
                         throw new OverflowException($"{ckGroup.iPrefixCode}分组code容量达到最大值");
 
-                    int incr = ckGroup.iIncrNumber;
+                    long incr = ckGroup.iIncrNumber;
                     if (ckGroup.iIncrNumber + ckGroup.iUsedNumber > max)
                     {
                         incr = max - ckGroup.iUsedNumber;
@@ -113,10 +113,10 @@ namespace TicketCode.Core.Services
         /// <param name="iCode">取票码</param>
         /// <param name="iCodeLength">取票码长度</param>
         /// <returns></returns>
-        protected int GetFullCode(int iPrefixCode, int iCode, int iCodeLength)
+        protected long GetFullCode(int iPrefixCode, int iCode, int iCodeLength)
         {
             string code = iPrefixCode + iCode.ToString().PadLeft(iCodeLength, '0');
-            return int.Parse(code + GetCheckValue(code));
+            return long.Parse(code + GetCheckValue(code));
         }
 
         /// <summary>
@@ -124,14 +124,14 @@ namespace TicketCode.Core.Services
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        private int GetCheckValue(string code)
+        private long GetCheckValue(string code)
         {
-            int value = 0;
-            foreach (char item in code)
+            long value = 0;
+            for (int i = 0; i < code.Length; i++)
             {
-                value += Convert.ToInt32(item);
+                value += long.Parse(code.Substring(i, 1));
             }
-            return Convert.ToInt32(value.ToString().Last().ToString());
+            return Convert.ToInt64(value.ToString().Last().ToString());
         }
     }
 }

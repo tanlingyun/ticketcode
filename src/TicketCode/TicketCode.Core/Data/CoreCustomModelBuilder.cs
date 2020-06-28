@@ -42,7 +42,7 @@ namespace TicketCode.Core.Data
 
             modelBuilder.Entity<TcRequsets>(request =>
             {
-                request.HasIndex(x => new { x.iAccountId, x.sOuterNo }).IsUnique();
+                request.HasIndex(x => new { x.iAccountId, x.iGroupId, x.sOuterNo }).IsUnique();
 
                 request.HasOne(x => x.TcAccount)
                 .WithMany()

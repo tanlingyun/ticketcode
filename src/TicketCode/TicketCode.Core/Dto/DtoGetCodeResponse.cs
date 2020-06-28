@@ -22,7 +22,7 @@ namespace TicketCode.Core.Dto
         public int iLength { get; set; }
 
 
-        public IEnumerable<int> aNumbers { get; set; }
+        public IEnumerable<long> aNumbers { get; set; }
 
         public string tExpireTime { get; set; }
     }

@@ -40,9 +40,11 @@ namespace TicketCode.Core.Services
         /// <returns></returns>
         public async Task<Result<DtoGetCodeResponse>> GetCode(int iAccountId, int iPrefixCode, DtoGetCodeRequest request)
         {
-            if (await this.requestRepository.Query().Where(x => x.iAccountId == iAccountId && x.sOuterNo == request.sOuterNo)
+            if (await this.requestRepository.Query()
+                .Include(x => x.TcGroup)
+                .Where(x => x.iAccountId == iAccountId && x.TcGroup.iPrefixCode == iPrefixCode && x.sOuterNo == request.sOuterNo)
                 .AnyAsync())
-                return Result.Fail<DtoGetCodeResponse>($"{request.sOuterNo}已存在","");
+                return Result.Fail<DtoGetCodeResponse>($"{request.sOuterNo}已存在", "");
 
             var tc = new TcRequsets()
             {
@@ -53,7 +55,7 @@ namespace TicketCode.Core.Services
                 sOuterNo = request.sOuterNo,
                 sRequestNo = SequenceService.GetId(iPrefixCode),
                 tCreateTime = DateTime.Now,
-                tExpireTime = request.tExpireTime,
+                tExpireTime = DateTime.Parse(request.tExpireTime),
             };
 
             CheckGroupCapacity(iPrefixCode);
@@ -84,7 +86,7 @@ namespace TicketCode.Core.Services
             return Result.Ok<DtoGetCodeResponse>(new DtoGetCodeResponse()
             {
                 iLength = infoGroup.iLength,
-                tExpireTime = request.tExpireTime.ToString("yyyy/MM/dd HH:mm:ss"),
+                tExpireTime = request.tExpireTime,
                 iPrefixCode = iPrefixCode,
                 sOuterNo = request.sOuterNo,
                 sTcNo = tc.sRequestNo,
@@ -100,43 +102,49 @@ namespace TicketCode.Core.Services
         /// <param name="sOuterNoOrTcNo"></param>
         /// <param name="iFullCode"></param>
         /// <returns></returns>
-        public async Task<Result> ConsumeCode(int iAccountId, string sOuterNoOrTcNo,int iFullCode)
+        public async Task<Result> ConsumeCode(int iAccountId, string sOuterNoOrTcNo, long[] sFullCodes)
         {
-            var line = await this.lineRepository.Query()
-                .Include(x=>x.TcRequset)
-                .Where(x => x.iFullCode == iFullCode)
-                .Where(x => x.TcRequset.sOuterNo == sOuterNoOrTcNo || x.TcRequset.sRequestNo == sOuterNoOrTcNo)
-                .SingleOrDefaultAsync();
-
-            if (line == null)
-                return Result.Fail("取票码无效","");
-
-            if (line.bConsume)
-                return Result.Fail($"已于{line.tConsumeTime.Value.ToString("yyyy/MM/dd HH:mm:ss")}核销", "");
-
             using (var tran = this.lineRepository.BeginTransaction())
             {
                 try
                 {
-                    line.bConsume = true;
-                    line.tConsumeTime = DateTime.Now;
+                    foreach (var iFullCode in sFullCodes)
+                    {
+                        var line = await this.lineRepository.Query()
+                            .Include(x => x.TcRequset)
+                            .Where(x => x.iFullCode == iFullCode)
+                            .Where(x => x.TcRequset.sOuterNo == sOuterNoOrTcNo || x.TcRequset.sRequestNo == sOuterNoOrTcNo)
+                            .SingleOrDefaultAsync();
+
+                        if (line == null) throw new ExceptionResult($"取票码{iFullCode}无效");
+                        //return Result.Fail($"取票码{iFullCode}无效", "");
+
+                        if (line.bConsume) continue;
+                        //return Result.Fail($"已于{line.tConsumeTime.Value.ToString("yyyy/MM/dd HH:mm:ss")}核销", "");
+
+                        line.bConsume = true;
+                        line.tConsumeTime = DateTime.Now;
+
+                        TcConsume consume = new TcConsume()
+                        {
+                            iAccountId = iAccountId,
+                            iGroupId = line.TcRequset.iGroupId,
+                            iFullCode = iFullCode,
+                            iRequestLineId = line.id,
+                            tConsumeTime = DateTime.Now
+                        };
+                        this.consumeRepository.Add(consume);
+                    }
 
                     await this.lineRepository.SaveChangesAsync();
-
-                    TcConsume consume = new TcConsume()
-                    {
-                        iAccountId = iAccountId,
-                        iGroupId = line.TcRequset.iGroupId,
-                        iFullCode = iFullCode,
-                        iRequestLineId = line.id,
-                        tConsumeTime = DateTime.Now
-                    };
-
-                    this.consumeRepository.Add(consume);
-
                     await this.consumeRepository.SaveChangesAsync();
-
+                    
                     tran.Commit();
+                }
+                catch (ExceptionResult ex)
+                {
+                    tran.Rollback();
+                    return Result.Fail(ex.Message, "");
                 }
                 catch (Exception ex)
                 {
@@ -144,6 +152,7 @@ namespace TicketCode.Core.Services
                     throw ex;
                 }
             }
+
             return Result.Ok("核销成功");
         }
     }

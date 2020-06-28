@@ -36,6 +36,10 @@ namespace TicketCode.WebHost.Controllers
         [HttpPost("get")]
         public async Task<Result<DtoGetCodeResponse>> Get([FromBody] DtoGetCodeRequest request)
         {
+            DateTime dt;
+            if (!DateTime.TryParse(request.tExpireTime, out dt))
+                return Result.Fail<DtoGetCodeResponse>("失效时间格式错误", this.GetReqNo());
+
             var result = await this.requestService.GetCode(this.GetAccountId(), this.GetGroup(), request);
             result.reqno = this.GetReqNo();
             return result;
@@ -56,15 +60,15 @@ namespace TicketCode.WebHost.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("consume")]
-        public async Task<Result> Post(string sNo = "", int? iCode = null)
+        public async Task<Result> Post([FromBody]DtoConsumeCodeRequest request)
         {
-            if (string.IsNullOrWhiteSpace(sNo))
-                return Result.Fail("sNo不能为空", this.GetReqNo());
+            //if (string.IsNullOrWhiteSpace(sNo))
+            //    return Result.Fail("sNo不能为空", this.GetReqNo());
 
-            if (!iCode.HasValue || iCode.Value <= 0)
-                return Result.Fail("iCode无效", this.GetReqNo());
+            //if (!iCode.HasValue || iCode.Value <= 0)
+            //    return Result.Fail("iCode无效", this.GetReqNo());
 
-            var result = await this.requestService.ConsumeCode(this.GetAccountId(), sNo, iCode.Value);
+            var result = await this.requestService.ConsumeCode(this.GetAccountId(), request.sNo, request.aCodes);
             result.reqno = this.GetReqNo();
             return result;
         }

@@ -9,7 +9,7 @@ namespace TicketCode.Core.Models
     public class TcAccounts : EntityBase
     {
         [Required]
-        [MaxLength(10)]
+        [MaxLength(50)]
         public string sAppName { get; set; }
 
         [Required]

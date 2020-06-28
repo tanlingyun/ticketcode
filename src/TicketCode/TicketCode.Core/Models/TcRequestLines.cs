@@ -15,13 +15,13 @@ namespace TicketCode.Core.Models
         /// 取票码
         /// </summary>
         [Required]
-        public int iCode { get; set; }
+        public long iCode { get; set; }
 
         /// <summary>
         /// 完整取票码
         /// </summary>
         [Required]
-        public int iFullCode { get; set; }
+        public long iFullCode { get; set; }
 
         /// <summary>
         /// 是否核销
