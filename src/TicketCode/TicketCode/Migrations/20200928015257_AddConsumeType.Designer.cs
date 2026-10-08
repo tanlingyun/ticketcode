@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicketCode.Core.Data;
 
 namespace TicketCode.WebHost.Migrations
 {
     [DbContext(typeof(TcDbContext))]
-    partial class TcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200928015257_AddConsumeType")]
+    partial class AddConsumeType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,16 +174,10 @@ namespace TicketCode.WebHost.Migrations
                     b.Property<long>("iFullCode")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("iPrefixCode")
-                        .HasColumnType("int");
-
                     b.Property<long>("iRequestId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("tConsumeTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("tExpireTime")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("id");
@@ -189,8 +185,6 @@ namespace TicketCode.WebHost.Migrations
                     b.HasIndex("iFullCode");
 
                     b.HasIndex("iRequestId");
-
-                    b.HasIndex("bConsume", "tExpireTime");
 
                     b.ToTable("TcRequestLines");
                 });

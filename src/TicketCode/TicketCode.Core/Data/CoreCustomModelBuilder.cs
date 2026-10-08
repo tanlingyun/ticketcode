@@ -63,6 +63,7 @@ namespace TicketCode.Core.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
                 line.HasIndex(x => x.iFullCode);
+                line.HasIndex(x => new { x.bConsume, x.tExpireTime });
             });
 
             modelBuilder.Entity<TcConsume>(consume =>

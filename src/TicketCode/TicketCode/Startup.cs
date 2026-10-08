@@ -51,10 +51,7 @@ namespace TicketCode.WebHost
             }
             else
             {
-                app.UseWhen(
-                    context => !context.Request.Path.StartsWithSegments("/api"),
-                    a => a.UseExceptionHandler("/Home/Error")
-                );
+                app.UseExceptionHandler("/error");
             }
 
             app.UseRouting();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace TicketCode.WebHost
 {
@@ -13,7 +14,18 @@ namespace TicketCode.WebHost
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                CreateWebHostBuilder(args)
+                    .ConfigureAppConfiguration(SetupConfiguration)
+                    .ConfigureLogging(SetupLogging)
+                    .Build()
+                    .Run();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,5 +34,22 @@ namespace TicketCode.WebHost
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            Microsoft.AspNetCore.WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+
+        private static void SetupConfiguration(WebHostBuilderContext hostingContext, IConfigurationBuilder configBuilder)
+        {
+            var configuration = configBuilder.Build();
+            Log.Logger = new LoggerConfiguration()
+                       .ReadFrom.Configuration(configuration)
+                       .CreateLogger();
+        }
+
+        private static void SetupLogging(WebHostBuilderContext hostingContext, ILoggingBuilder loggingBuilder)
+        {
+            loggingBuilder.AddSerilog();
+        }
     }
 }

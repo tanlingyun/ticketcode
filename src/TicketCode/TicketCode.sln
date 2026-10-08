@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{3B0E4C38-ED6
 		..\..\doc\Redis表设计.txt = ..\..\doc\Redis表设计.txt
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketCode.SDK", "TicketCode.SDK\TicketCode.SDK.csproj", "{A9057059-566E-4CA4-B7E2-A28FBECD8DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketCode.Test", "TicketCode.Test\TicketCode.Test.csproj", "{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{BCB184B0-4CA3-4E08-98C9-56E9EE6E77EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB184B0-4CA3-4E08-98C9-56E9EE6E77EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB184B0-4CA3-4E08-98C9-56E9EE6E77EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9057059-566E-4CA4-B7E2-A28FBECD8DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9057059-566E-4CA4-B7E2-A28FBECD8DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9057059-566E-4CA4-B7E2-A28FBECD8DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9057059-566E-4CA4-B7E2-A28FBECD8DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +55,8 @@ Global
 		{8F8D3DB9-C8C0-41ED-A582-4D0371DD8F7C} = {FC902775-A8D9-4222-8F54-995599A18BE3}
 		{610E1507-43B7-4F2B-BDA0-5364DF7F1BE4} = {FC902775-A8D9-4222-8F54-995599A18BE3}
 		{BCB184B0-4CA3-4E08-98C9-56E9EE6E77EA} = {FC902775-A8D9-4222-8F54-995599A18BE3}
+		{A9057059-566E-4CA4-B7E2-A28FBECD8DC3} = {FC902775-A8D9-4222-8F54-995599A18BE3}
+		{8EFF244D-5BE0-4F40-B696-0ED3D959D1D1} = {FC902775-A8D9-4222-8F54-995599A18BE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {390294D4-8889-400D-8DA1-CE7A60C51A10}

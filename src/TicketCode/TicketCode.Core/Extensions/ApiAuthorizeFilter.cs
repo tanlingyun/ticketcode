@@ -77,7 +77,6 @@ namespace TicketCode.Core.Extensions
             clamins.Add(new Claim("appid", account.sAppId));
             clamins.Add(new Claim("accountid", account.id.ToString()));
             clamins.Add(new Claim("group", group));
-
             System.Threading.Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(clamins));
         }
 

@@ -9,8 +9,8 @@ using TicketCode.Core.Data;
 namespace TicketCode.WebHost.Migrations
 {
     [DbContext(typeof(TcDbContext))]
-    [Migration("20200616074355_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20220510073733_Update20220510")]
+    partial class Update20220510
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,8 +35,8 @@ namespace TicketCode.WebHost.Migrations
 
                     b.Property<string>("sAppName")
                         .IsRequired()
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<string>("sAppSecret")
                         .IsRequired()
@@ -63,8 +63,8 @@ namespace TicketCode.WebHost.Migrations
                     b.Property<long>("iAccountId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("iFullCode")
-                        .HasColumnType("int");
+                    b.Property<long>("iFullCode")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("iGroupId")
                         .HasColumnType("bigint");
@@ -122,28 +122,28 @@ namespace TicketCode.WebHost.Migrations
                     b.Property<bool>("bDisable")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("iCurrAvaNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("iCurrAvaNumber")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("iIncrNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("iIncrNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("iLength")
                         .HasColumnType("int");
 
-                    b.Property<int>("iMinNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("iMinNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("iPrefixCode")
                         .HasColumnType("int");
 
-                    b.Property<int>("iUsedNumber")
-                        .HasColumnType("int");
+                    b.Property<long>("iUsedNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("sName")
                         .IsRequired()
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("tCreateTime")
                         .HasColumnType("datetime(6)");
@@ -165,11 +165,14 @@ namespace TicketCode.WebHost.Migrations
                     b.Property<bool>("bConsume")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("iCode")
+                    b.Property<long>("iCode")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("iConsumeType")
                         .HasColumnType("int");
 
-                    b.Property<int>("iFullCode")
-                        .HasColumnType("int");
+                    b.Property<long>("iFullCode")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("iRequestId")
                         .HasColumnType("bigint");
@@ -177,11 +180,16 @@ namespace TicketCode.WebHost.Migrations
                     b.Property<DateTime?>("tConsumeTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("tExpireTime")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("id");
 
                     b.HasIndex("iFullCode");
 
                     b.HasIndex("iRequestId");
+
+                    b.HasIndex("bConsume", "tExpireTime");
 
                     b.ToTable("TcRequestLines");
                 });
@@ -224,7 +232,7 @@ namespace TicketCode.WebHost.Migrations
 
                     b.HasIndex("iGroupId");
 
-                    b.HasIndex("iAccountId", "sOuterNo")
+                    b.HasIndex("iAccountId", "iGroupId", "sOuterNo")
                         .IsUnique();
 
                     b.ToTable("TcRequsets");

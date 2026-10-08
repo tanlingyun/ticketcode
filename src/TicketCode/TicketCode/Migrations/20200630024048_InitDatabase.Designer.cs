@@ -9,8 +9,8 @@ using TicketCode.Core.Data;
 namespace TicketCode.WebHost.Migrations
 {
     [DbContext(typeof(TcDbContext))]
-    [Migration("20200624064523_UpdateCodeLength")]
-    partial class UpdateCodeLength
+    [Migration("20200630024048_InitDatabase")]
+    partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,8 +35,8 @@ namespace TicketCode.WebHost.Migrations
 
                     b.Property<string>("sAppName")
                         .IsRequired()
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<string>("sAppSecret")
                         .IsRequired()
@@ -142,8 +142,8 @@ namespace TicketCode.WebHost.Migrations
 
                     b.Property<string>("sName")
                         .IsRequired()
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10);
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("tCreateTime")
                         .HasColumnType("datetime(6)");
@@ -224,7 +224,7 @@ namespace TicketCode.WebHost.Migrations
 
                     b.HasIndex("iGroupId");
 
-                    b.HasIndex("iAccountId", "sOuterNo")
+                    b.HasIndex("iAccountId", "iGroupId", "sOuterNo")
                         .IsUnique();
 
                     b.ToTable("TcRequsets");

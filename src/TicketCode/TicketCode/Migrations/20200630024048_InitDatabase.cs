@@ -32,13 +32,13 @@ namespace TicketCode.WebHost.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     iPrefixCode = table.Column<int>(nullable: false),
-                    sName = table.Column<string>(maxLength: 10, nullable: false),
+                    sName = table.Column<string>(maxLength: 50, nullable: false),
                     iLength = table.Column<int>(nullable: false),
-                    iUsedNumber = table.Column<int>(nullable: false),
-                    iIncrNumber = table.Column<int>(nullable: false),
-                    iMinNumber = table.Column<int>(nullable: false),
+                    iUsedNumber = table.Column<long>(nullable: false),
+                    iIncrNumber = table.Column<long>(nullable: false),
+                    iMinNumber = table.Column<long>(nullable: false),
                     tCreateTime = table.Column<DateTime>(nullable: false),
-                    iCurrAvaNumber = table.Column<int>(nullable: false),
+                    iCurrAvaNumber = table.Column<long>(nullable: false),
                     tUpdateTime = table.Column<DateTime>(nullable: true),
                     bDisable = table.Column<bool>(nullable: false),
                     bDelete = table.Column<bool>(nullable: false)
@@ -113,8 +113,8 @@ namespace TicketCode.WebHost.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     iRequestId = table.Column<long>(nullable: false),
-                    iCode = table.Column<int>(nullable: false),
-                    iFullCode = table.Column<int>(nullable: false),
+                    iCode = table.Column<long>(nullable: false),
+                    iFullCode = table.Column<long>(nullable: false),
                     bConsume = table.Column<bool>(nullable: false),
                     tConsumeTime = table.Column<DateTime>(nullable: true)
                 },
@@ -136,7 +136,7 @@ namespace TicketCode.WebHost.Migrations
                     id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     iRequestLineId = table.Column<long>(nullable: false),
-                    iFullCode = table.Column<int>(nullable: false),
+                    iFullCode = table.Column<long>(nullable: false),
                     tConsumeTime = table.Column<DateTime>(nullable: false),
                     iGroupId = table.Column<long>(nullable: false),
                     iAccountId = table.Column<long>(nullable: false)
@@ -217,9 +217,9 @@ namespace TicketCode.WebHost.Migrations
                 column: "iGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TcRequsets_iAccountId_sOuterNo",
+                name: "IX_TcRequsets_iAccountId_iGroupId_sOuterNo",
                 table: "TcRequsets",
-                columns: new[] { "iAccountId", "sOuterNo" },
+                columns: new[] { "iAccountId", "iGroupId", "sOuterNo" },
                 unique: true);
         }
 

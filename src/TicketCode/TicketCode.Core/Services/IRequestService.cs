@@ -27,5 +27,17 @@ namespace TicketCode.Core.Services
         /// <param name="iFullCode"></param>
         /// <returns></returns>
         Task<Result> ConsumeCode(int iAccountId, string sOuterNoOrTcNo, long[] iFullCode);
+
+        /// <summary>
+        /// 码回收
+        /// </summary>
+        /// <returns></returns>
+        Task RecycleCode();
+
+        /// <summary>
+        /// 回收
+        /// </summary>
+        /// <returns></returns>
+        Task TemporaryRecycle();
     }
 }

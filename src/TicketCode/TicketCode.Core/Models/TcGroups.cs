@@ -15,7 +15,7 @@ namespace TicketCode.Core.Models
         public int iPrefixCode { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(50)]
         public string sName { get; set; }
 
         /// <summary>

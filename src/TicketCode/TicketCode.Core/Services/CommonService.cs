@@ -22,15 +22,15 @@ namespace TicketCode.Core.Services
         protected IRepository<TcGroups> groupRepository = null;
 
         protected ILogger logger = null;
-        protected IRedisCache redisCache = null;
+        //protected IRedisCache redisCache = null;
 
         protected static object _lock = new object();
 
-        public CommonService(IRepository<TcGroups> groupRepository, IRedisCache redisCache,ILoggerFactory loggerFactory)
+        public CommonService(IRepository<TcGroups> groupRepository, /*IRedisCache redisCache,*/ILoggerFactory loggerFactory)
         {
             this.groupRepository = groupRepository;
 
-            this.redisCache = redisCache;
+            //this.redisCache = redisCache;
             this.logger = loggerFactory.CreateLogger<CommonService>();
         }
 
@@ -60,21 +60,30 @@ namespace TicketCode.Core.Services
         /// <param name="iPrefixCode"></param>
         public void CheckGroupCapacity(int iPrefixCode)
         { 
-            lock (_lock)
+            //lock (_lock)
             {
                 var ckGroup = this.groupRepository.Query()
                     .Where(x => x.iPrefixCode == iPrefixCode)
                     .Take(1)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
 
                 if (ckGroup == null || ckGroup.bDelete || ckGroup.bDisable)
                     return;
 
                 string key = string.Format(this.KEY_TC_GROUP_LIST, ckGroup.iPrefixCode);
-                var len = this.redisCache.ListLength(key);
+                //var len = this.redisCache.ListLength(key);
+                var len = RedisHelper.LLen(key);
                 if (len < ckGroup.iMinNumber)
                 {
-                    int max = (int)Math.Pow(10, ckGroup.iLength+1) - 1;
+                    if(!RedisHelper.SetNx($"{iPrefixCode}", 1))
+                    {
+                        logger.LogInformation("分组{code}未占用到nx锁，不分配新的码",iPrefixCode);
+                        return;
+                    }
+                    //设置自动过期时间
+                    RedisHelper.Expire($"{iPrefixCode}", 100);
+
+                    int max = (int)Math.Pow(10, ckGroup.iLength + 1) - 1;
 
                     if (ckGroup.iUsedNumber >= max)
                         throw new OverflowException($"{ckGroup.iPrefixCode}分组code容量达到最大值");
@@ -95,14 +104,18 @@ namespace TicketCode.Core.Services
                     //重新排序
                     values.Sort(delegate (string a, string b) { return (new Random()).Next(-1, 1); });
                     ckGroup.iUsedNumber += ckGroup.iIncrNumber;
-                    this.redisCache.ListRightPush(key, values.ToArray<string>());
+                    //this.redisCache.ListRightPush(key, values.ToArray<string>());
+                    RedisHelper.RPushAsync(key, values.ToArray<string>());
                     ckGroup.iCurrAvaNumber = (int)len + values.Count;
+
+                    this.logger.LogWarning("组[{name}]扩容{num},扩容后累计已使用{tnum}", ckGroup.sName, incr, ckGroup.iUsedNumber);
+
+                    this.groupRepository.SaveChanges();
                 }
                 else
                 {
-                    ckGroup.iCurrAvaNumber = (int)len;
+                    //ckGroup.iCurrAvaNumber = (int)len;
                 }
-                this.groupRepository.SaveChanges();
             }
         }
 

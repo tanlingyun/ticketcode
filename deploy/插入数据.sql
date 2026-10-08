@@ -39,3 +39,17 @@ INSERT INTO tcgroupinaccount(id,iGroupId,iAccountId) values(2,3,2);
 INSERT INTO tcgroupinaccount(id,iGroupId,iAccountId) values(3,3,3);
 INSERT INTO tcgroupinaccount(id,iGroupId,iAccountId) values(4,3,4);
 
+
+select * from  `ticketcode`.`tcgroups`;
+INSERT INTO `ticketcode`.`tcgroups` (`iPrefixCode`, `sName`, `iLength`, `iUsedNumber`, `iIncrNumber`, `iMinNumber`, `iCurrAvaNumber`, `bDisable`, `bDelete`,`tCreateTime`) 
+VALUES ('13', '高诚项目', '7', '0', '10000', '2000', '10000', '0', '0',now());
+
+select * from  `ticketcode`.`tcaccounts`;
+INSERT INTO `ticketcode`.`tcaccounts` (`sAppName`, `sAppId`, `sAppSecret`, `tCreateTime`, `bDisable`) 
+VALUES ('高诚项目', 'HZGC', '3522fded75f8a9d557955ac585de6889', now(), '0');
+
+INSERT INTO `ticketcode`.`tcgroupinaccount` (`iGroupId`, `iAccountId`) VALUES ('7', '6');
+INSERT INTO `ticketcode`.`tcgroupinaccount` (`iGroupId`, `iAccountId`) VALUES ('6', '5');
+
+
+

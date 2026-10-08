@@ -1,13 +1,10 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TicketCode.Core.Data;
+using TicketCode.Core.HostService;
 using TicketCode.Core.Services;
 using TicketCode.Infrastructure.Data;
 
@@ -17,12 +14,15 @@ namespace TicketCode.WebHost.Extension
     {
         public static IServiceCollection AddCustomedCodeStore(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddStackExchangeRedisCache(option =>
-            {
-                option.InstanceName = "tkc";
-                option.Configuration = configuration.GetConnectionString("RedisConnection");
+            //初始化redis
+            var client = new CSRedis.CSRedisClient(configuration.GetConnectionString("RedisConnection"));
+            RedisHelper.Initialization(client);
+            //services.AddStackExchangeRedisCache(option =>
+            //{
+            //    option.InstanceName = "tkc";
+            //    option.Configuration = configuration.GetConnectionString("RedisConnection");
 
-            });
+            //});
             return services;
         }
 
@@ -30,7 +30,7 @@ namespace TicketCode.WebHost.Extension
         {
             services.AddDbContextPool<TcDbContext>(options =>
                 options.UseMySql(configuration.GetConnectionString("MysqlConnection"),
-                    b => b.MigrationsAssembly("TicketCode.WebHost")));
+                    b => b.MigrationsAssembly("TicketCode.WebHost")), 5000);
             return services;
         }
 
@@ -38,9 +38,8 @@ namespace TicketCode.WebHost.Extension
         {
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient(typeof(IRepositoryWithTypedId<,>), typeof(RepositoryWithTypedId<,>));
-
             services.AddScoped<IRequestService, RequestService>();
-
+            //services.AddHostedService<BackgroundHostService>();
             return services;
         }
 
