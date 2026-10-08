@@ -1,0 +1,6 @@
+{
+  "ConnectionStrings": {
+    "MysqlConnection": "Data Source=47.100.97.19;Database=ticketcode;User ID=hxezdev;Password=hxezdev123456;pooling=true;CharSet=utf8;port=33006;sslmode=none",
+    "RedisConnection": "47.100.97.19:6379,password=x3Mdx)Dq!7d"
+  }
+}
